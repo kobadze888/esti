@@ -140,8 +140,9 @@ export default function SalonPage() {
                   <div className="space-y-4 mb-6">
                       <div>
                           <p className="text-xs text-slate-500 font-bold uppercase mb-1">სამუშაო საათები</p>
-                          <div className="flex justify-between text-sm"><span>ორშ-პარ</span> <span class="font-medium text-slate-900">10:00 - 20:00</span></div>
-                          <div className="flex justify-between text-sm"><span>შაბ-კვი</span> <span class="font-medium text-slate-900">11:00 - 19:00</span></div>
+                          {/* გასწორებული ხაზები: შეცვლილია class -> className */}
+                          <div className="flex justify-between text-sm"><span>ორშ-პარ</span> <span className="font-medium text-slate-900">10:00 - 20:00</span></div>
+                          <div className="flex justify-between text-sm"><span>შაბ-კვი</span> <span className="font-medium text-slate-900">11:00 - 19:00</span></div>
                       </div>
                       <div>
                           <p className="text-xs text-slate-500 font-bold uppercase mb-1">კონტაქტი</p>

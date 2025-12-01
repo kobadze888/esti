@@ -117,8 +117,8 @@ export default function Home() {
                             </div>
                             <div className="absolute -top-2 -right-2 w-8 h-8 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold border-4 border-white">1</div>
                         </div>
-                        <h3 class="font-bold text-xl text-slate-900 mb-2">მოძებნე სალონი</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed px-8">გამოიყენე ფილტრები და იპოვე საუკეთესო სპეციალისტი შენს უბანში.</p>
+                        <h3 className="font-bold text-xl text-slate-900 mb-2 uppercase">მოძებნე სალონი</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed px-8">გამოიყენე ფილტრები და იპოვე საუკეთესო სპეციალისტი შენს უბანში.</p>
                     </div>
                     
                     <div className="text-center group">
@@ -128,8 +128,8 @@ export default function Home() {
                             </div>
                             <div className="absolute -top-2 -right-2 w-8 h-8 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold border-4 border-white">2</div>
                         </div>
-                        <h3 class="font-bold text-xl text-slate-900 mb-2">დაუკავშირდი</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed px-8">დარეკე პირდაპირ ან დაჯავშნე ონლაინ თუ სალონს აქვს ეს ფუნქცია.</p>
+                        <h3 className="font-bold text-xl text-slate-900 mb-2 uppercase">დაუკავშირდი</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed px-8">დარეკე პირდაპირ ან დაჯავშნე ონლაინ თუ სალონს აქვს ეს ფუნქცია.</p>
                     </div>
                     
                     <div className="text-center group">
@@ -139,8 +139,8 @@ export default function Home() {
                             </div>
                             <div className="absolute -top-2 -right-2 w-8 h-8 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold border-4 border-white">3</div>
                         </div>
-                        <h3 class="font-bold text-xl text-slate-900 mb-2">ეწვიე და ისიამოვნე</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed px-8">მიიღე საუკეთესო მომსახურება რიგში დგომის გარეშე.</p>
+                        <h3 className="font-bold text-xl text-slate-900 mb-2 uppercase">ეწვიე და ისიამოვნე</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed px-8">მიიღე საუკეთესო მომსახურება რიგში დგომის გარეშე.</p>
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@ export default function Home() {
                     <div className="text-white space-y-6">
                         <span className="bg-white/10 text-blue-200 px-3 py-1 rounded-full text-xs font-bold uppercase border border-white/10">პარტნიორებისთვის</span>
                         <h2 className="text-3xl md:text-4xl font-bold leading-tight">მართე შენი სალონი <br/> თანამედროვე სტანდარტებით</h2>
-                        <p class="text-slate-300 max-w-md">დაგეგმე ვიზიტები, მართე თანამშრომლები და გაზარდე შემოსავალი EasyBook CRM-ის დახმარებით.</p>
+                        <p className="text-slate-300 max-w-md">დაგეგმე ვიზიტები, მართე თანამშრომლები და გაზარდე შემოსავალი EasyBook CRM-ის დახმარებით.</p>
                         <div className="flex flex-col sm:flex-row gap-4 pt-2">
                             <Link href="/business" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-900/50 text-center">დაარეგისტრირე სალონი</Link>
                             <button className="bg-transparent border border-white/20 hover:bg-white/10 text-white px-8 py-3.5 rounded-xl font-bold transition-all">გაიგე მეტი</button>

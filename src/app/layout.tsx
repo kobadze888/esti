@@ -1,20 +1,26 @@
 // File: src/app/layout.tsx
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_Georgian } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local"; // 1. ვიმატებთ localFont-ს
 import "./globals.css";
 
-// Inter ფონტის კონფიგურაცია (ინგლისური/ლათინური ტექსტისთვის)
 const inter = Inter({ 
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 });
 
-// Noto Sans Georgian ფონტის კონფიგურაცია (ქართული ტექსტისთვის)
-const notoSansGeorgian = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  variable: "--font-noto-georgian",
-  display: "swap",
+// 2. ვტვირთავთ FiraGO-ს
+const firaGo = localFont({
+  src: [
+    {
+      path: '../../public/fonts/FiraGO-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-fira-go',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -29,8 +35,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ka">
-      {/* ფონტების ცვლადები და ბაზისური კლასები */}
-      <body className={`${inter.variable} ${notoSansGeorgian.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
+      {/* 3. ვამატებთ firaGo.variable-ს body კლასებში */}
+      <body className={`${inter.variable} ${firaGo.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
         {children}
       </body>
     </html>

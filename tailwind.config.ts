@@ -15,8 +15,8 @@ const config: Config = {
       },
       // ფონტების კონფიგურაცია
       fontFamily: {
-        // პრიორიტეტი: 1. ქართული, 2. ინგლისური (Inter), 3. სისტემური
-        sans: ["var(--font-noto-georgian)", "var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-inter)", "sans-serif"],
+        mtavruli: ["var(--font-fira-go)", "sans-serif"],
       },
     },
   },
