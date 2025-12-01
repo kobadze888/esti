@@ -1,3 +1,4 @@
+// File: tailwind.config.ts
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -11,6 +12,11 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      // ფონტების კონფიგურაცია
+      fontFamily: {
+        // პრიორიტეტი: 1. ქართული, 2. ინგლისური (Inter), 3. სისტემური
+        sans: ["var(--font-noto-georgian)", "var(--font-inter)", "sans-serif"],
       },
     },
   },
