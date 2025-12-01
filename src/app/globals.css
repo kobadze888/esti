@@ -1,3 +1,4 @@
+/* File: src/app/globals.css */
 @import "tailwindcss";
 
 :root {
@@ -9,5 +10,26 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: #f8fafc;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', 'Noto Sans Georgian', sans-serif;
+}
+
+/* Custom Scrollbar from Prototype */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; border: 2px solid #f8fafc; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Smooth Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.animate-fade-in { animation: fadeIn 0.4s ease-out; }
+.animate-slide-up { animation: slideUp 0.4s ease-out; }
+.animate-scale-in { animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+
+.hardware-accelerated {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform;
 }
