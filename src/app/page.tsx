@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, MapPin, Calendar, ArrowRight, Star, Heart, Phone, ShieldCheck, Zap, Info } from 'lucide-react';
+import { Search, MapPin, Calendar, ArrowRight, Star, Heart, Phone, Zap, Info } from 'lucide-react';
 import { Navbar } from '@/components/layout/Navbar';
 import { db, CATEGORIES } from '@/lib/mockDb';
 
@@ -11,105 +11,109 @@ export default function Home() {
 
       <main className="flex-grow">
         
-        {/* --- HERO SECTION --- */}
-        <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+       {/* --- HERO SECTION --- */}
+<section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+    
+    {/* Background Image */}
+    <div className="absolute inset-0 z-0">
+        <Image 
+          src="https://tbilisiweb.com/wp-content/uploads/2025/12/bg_hero_small.jpeg" 
+          alt="Esti.ge Salon Interior" 
+          fill 
+          className="object-cover"
+          priority 
+          quality={100}
+          unoptimized 
+          sizes="100vw"
+        />
+        {/* Updated Overlay: 
+            - ამოღებულია indigo (ლურჯი), რომ არ იყოს "მყვირალა".
+            - Opacity გაზრდილია 90-95%-მდე მაქსიმალური კონტრასისთვის.
+            - გამოყენებულია bg-gradient-to-b (ზემოდან ქვემოთ), რომ ძირში შავში გადავიდეს.
+        */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/90 to-slate-950/95"></div>
+    </div>
+
+    {/* Hero Content */}
+    <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center mt-10">
+        
+        {/* Badge - ოდნავ გავამუქე ფონიც */}
+        <div className="inline-flex items-center justify-center px-5 py-1.5 rounded-full bg-black/20 backdrop-blur-md border border-white/10 mb-8 cursor-default">
+            <span className="text-white text-xs md:text-sm tracking-wide">
+                <span className="font-bold">Esti.ge</span>
+                <span className="mx-2 opacity-50">|</span>
+                <span className="font-medium opacity-80">სილამაზის სერვისების ერთიანი სივრცე</span>
+            </span>
+        </div>
+
+        {/* H1 Heading */}
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-2xl animate-fade-in-up">
+            ჩაეწერე მარტივად
+        </h1>
+        
+        {/* Subtitle - ტექსტის ფერი slate-300-დან slate-200-ზე ავწიე რომ უკეთ გამოჩნდეს მუქ ფონზე */}
+        <p className="text-base md:text-xl text-slate-200 mb-12 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            იპოვე საუკეთესო სალონები, ბარბერშოპები და ესთეტიკური ცენტრები შენს უბანში.
+        </p>
+
+        {/* Search Bar */}
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-2 rounded-2xl md:rounded-full max-w-4xl mx-auto shadow-2xl flex flex-col md:flex-row gap-2 animate-fade-in-up transform transition-all hover:scale-[1.005] hover:border-white/20 hover:bg-white/10" style={{ animationDelay: '0.2s' }}>
             
-            {/* Background Image */}
-            <div className="absolute inset-0 z-0">
-                <Image 
-                  src="https://tbilisiweb.com/wp-content/uploads/2025/12/bg_hero_small.jpeg" 
-                  alt="Esti.ge Salon Interior" 
-                  fill 
-                  className="object-cover"
-                  priority 
-                  quality={100}
-                  unoptimized 
-                  sizes="100vw"
-                />
-                {/* Heavy Overlay - Maximum contrast, de-emphasizing the photo */}
-                <div className="absolute inset-0 bg-black/80"></div>
+            {/* Query Input */}
+            <div className="flex-1 bg-white rounded-xl md:rounded-l-full md:rounded-r-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
+                <Search className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
+                <div className="flex flex-col items-start w-full">
+                    <label htmlFor="search-query" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">რას ეძებ?</label>
+                    <input 
+                      id="search-query"
+                      type="text" 
+                      placeholder="მაგ: სალონი, ბარბერშოპი" 
+                      className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-400 text-sm md:text-base h-5"
+                    />
+                </div>
             </div>
 
-            {/* Hero Content */}
-            <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center mt-10">
-                
-                {/* Badge - Exact match to screenshot request */}
-                <div className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-10 cursor-default">
-                    <span className="text-white text-sm md:text-base tracking-wide">
-                        <span className="font-bold">Esti.ge</span>
-                        <span className="mx-3 opacity-50">|</span>
-                        <span className="font-medium opacity-90">სილამაზის სერვისების ერთიანი სივრცე</span>
-                    </span>
-                </div>
+            <div className="hidden md:block w-px bg-white/10 my-2"></div>
 
-                {/* H1 Heading - Two Words */}
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-tight tracking-tight drop-shadow-2xl animate-fade-in-up">
-                    შენი სტილი
-                </h1>
-                
-                {/* Subtitle - Exact text provided */}
-                <p className="text-lg md:text-2xl text-slate-200 mb-14 max-w-3xl mx-auto font-light leading-relaxed drop-shadow-md animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                    იპოვე საუკეთესო სალონები, ბარბერშოპები და ესთეტიკური ცენტრები შენს უბანში.
-                </p>
-
-                {/* Search Bar */}
-                <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-2 rounded-2xl md:rounded-full max-w-4xl mx-auto shadow-2xl flex flex-col md:flex-row gap-2 animate-fade-in-up transform transition-all hover:scale-[1.01] hover:border-white/30" style={{ animationDelay: '0.2s' }}>
-                    
-                    {/* Query Input */}
-                    <div className="flex-1 bg-white rounded-xl md:rounded-l-full md:rounded-r-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
-                        <Search className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
-                        <div className="flex flex-col items-start w-full">
-                            <label htmlFor="search-query" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">რას ეძებ?</label>
-                            <input 
-                              id="search-query"
-                              type="text" 
-                              placeholder="მაგ: სალონი, ბარბერშოპი" 
-                              className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-400 text-sm md:text-base h-5"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="hidden md:block w-px bg-white/10 my-2"></div>
-
-                    {/* Location Input */}
-                    <div className="flex-1 bg-white rounded-xl md:rounded-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
-                        <MapPin className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
-                        <div className="flex flex-col items-start w-full">
-                            <label htmlFor="search-location" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">ლოკაცია</label>
-                            <input 
-                              id="search-location"
-                              type="text" 
-                              placeholder="თბილისი, ვაკე..." 
-                              className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-400 text-sm md:text-base h-5"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Date Input */}
-                    <div className="hidden md:flex flex-1 bg-white rounded-none h-16 px-6 items-center group cursor-pointer hover:bg-slate-50 transition-colors border-l border-slate-100 relative z-20">
-                        <Calendar className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
-                        <div className="flex flex-col items-start w-full">
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">თარიღი</label>
-                            <span className="text-slate-800 text-sm font-bold">ნებისმიერი</span>
-                        </div>
-                    </div>
-
-                    {/* Search Button */}
-                    <Link href="/search" className="bg-indigo-600 hover:bg-indigo-700 text-white h-14 md:h-16 px-10 rounded-xl md:rounded-full font-bold text-lg transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 md:w-auto w-full relative z-20">
-                        <span>ძებნა</span>
-                    </Link>
-                </div>
-
-                {/* Quick Categories */}
-                <div className="mt-12 flex flex-wrap justify-center gap-4 text-sm font-medium text-white/80 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                    <Link href="/search?q=hair" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">✂️</span> თმის შეჭრა</Link>
-                    <Link href="/search?q=nails" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💅</span> მანიკური</Link>
-                    <Link href="/search?q=barber" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💈</span> ბარბერშოპი</Link>
-                    <Link href="/search?q=spa" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💆‍♀️</span> სპა & ესთეტიკა</Link>
+            {/* Location Input */}
+            <div className="flex-1 bg-white rounded-xl md:rounded-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
+                <MapPin className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
+                <div className="flex flex-col items-start w-full">
+                    <label htmlFor="search-location" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">ლოკაცია</label>
+                    <input 
+                      id="search-location"
+                      type="text" 
+                      placeholder="თბილისი, ვაკე..." 
+                      className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-400 text-sm md:text-base h-5"
+                    />
                 </div>
             </div>
-            
-        </section>
+
+            {/* Date Input */}
+            <div className="hidden md:flex flex-1 bg-white rounded-none h-16 px-6 items-center group cursor-pointer hover:bg-slate-50 transition-colors border-l border-slate-100 relative z-20">
+                <Calendar className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
+                <div className="flex flex-col items-start w-full">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">თარიღი</label>
+                    <span className="text-slate-800 text-sm font-bold">ნებისმიერი</span>
+                </div>
+            </div>
+
+            {/* Search Button */}
+            <Link href="/search" className="bg-indigo-600 hover:bg-indigo-700 text-white h-14 md:h-16 px-10 rounded-xl md:rounded-full font-bold text-lg transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 md:w-auto w-full relative z-20">
+                <span>ძებნა</span>
+            </Link>
+        </div>
+
+        {/* Quick Categories */}
+        <div className="mt-10 flex flex-wrap justify-center gap-3 text-sm font-medium text-white/70 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <Link href="/search?q=hair" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">✂️</span> თმის შეჭრა</Link>
+            <Link href="/search?q=nails" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💅</span> მანიკური</Link>
+            <Link href="/search?q=barber" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💈</span> ბარბერშოპი</Link>
+            <Link href="/search?q=spa" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💆‍♀️</span> სპა</Link>
+        </div>
+    </div>
+    
+</section>
 
         {/* --- CATEGORIES SECTION --- */}
         <section className="py-20 max-w-7xl mx-auto px-4 relative z-10 -mt-24">
