@@ -1,16 +1,11 @@
-// File: src/app/layout.tsx
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local"; // 1. ვიმატებთ localFont-ს
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-// 2. ვტვირთავთ FiraGO-ს
+/**
+ * Font Configuration
+ * Loading local fonts with variable weight support for optimal performance.
+ */
 const firaGo = localFont({
   src: [
     {
@@ -18,14 +13,45 @@ const firaGo = localFont({
       weight: '700',
       style: 'normal',
     },
+    {
+      path: '../../public/fonts/FiraGO-Bold.woff',
+      weight: '700',
+      style: 'normal',
+    },
   ],
-  variable: '--font-fira-go',
-  display: 'swap',
+  variable: "--font-fira-go",
+  display: "swap",
 });
 
+/**
+ * SEO & Metadata Configuration
+ * Defines global metadata, Open Graph, and robot directives.
+ */
 export const metadata: Metadata = {
-  title: "Esti App",
-  description: "სილამაზის სერვისების ერთიანი სივრცე",
+  title: {
+    default: "Esti.ge - სილამაზის სერვისების ონლაინ ჯავშანი",
+    template: "%s | Esti.ge"
+  },
+  description: "იპოვე და დაჯავშნე ვიზიტი საუკეთესო სალონებში, ესთეტიკურ ცენტრებსა და სტილისტებთან თბილისში.",
+  keywords: ["სალონი", "სილამაზე", "ჯავშანი", "Esti", "თბილისი"],
+  openGraph: {
+    title: "Esti.ge - Premium Beauty Booking Platform",
+    description: "სილამაზის სერვისების ერთიანი სივრცე.",
+    url: "https://esti.ge",
+    siteName: "Esti.ge",
+    locale: "ka_GE",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0f172a",
 };
 
 export default function RootLayout({
@@ -34,9 +60,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ka">
-      {/* 3. ვამატებთ firaGo.variable-ს body კლასებში */}
-      <body className={`${inter.variable} ${firaGo.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
+    <html lang="ka" className="scroll-smooth">
+      <body className={`${firaGo.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
         {children}
       </body>
     </html>

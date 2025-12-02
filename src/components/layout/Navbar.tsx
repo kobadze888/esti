@@ -1,65 +1,125 @@
-// File: src/components/layout/Navbar.tsx
 'use client';
 
-import React, { useState } from 'react';
-import { Search, User, Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { Menu, X, User, LogIn } from 'lucide-react';
 
 export function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  /**
+   * Scroll Handler
+   * Toggles the `isScrolled` state based on scroll position.
+   * Uses a small threshold (10px) to trigger the effect immediately but smoothly.
+   */
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 10);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Lock body scroll when mobile menu is active
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [mobileMenuOpen]);
+
   return (
-    <nav className="bg-white/90 backdrop-blur-xl border-b border-slate-200/80 sticky top-0 z-50 transition-all duration-300 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between relative z-50">
+    <>
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+          isScrolled 
+            ? 'bg-white/95 backdrop-blur-md shadow-sm h-20' 
+            : 'bg-transparent h-20'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-8 h-full flex items-center justify-between">
           
-          {/* ლოგო */}
-          <Link href="/" className="flex items-center gap-3 cursor-pointer group">
-              <span className="font-bold text-2xl tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
-                  Esti<span className="text-blue-600 text-3xl leading-none">.</span>
-              </span>
+          {/* Brand Identity */}
+          <Link href="/" className="relative z-50 group flex items-center gap-1">
+            <span className={`font-bold text-2xl tracking-tighter transition-colors duration-300 ${
+              isScrolled || mobileMenuOpen ? 'text-slate-900' : 'text-white'
+            }`}>
+              Esti<span className="text-blue-500">.</span>ge
+            </span>
           </Link>
 
-          {/* დესკტოპ მენიუ */}
-          <div className="hidden md:flex items-center gap-5 text-sm font-medium text-slate-600">
-              <Link href="/search" className="hover:text-blue-600 cursor-pointer transition-colors px-3 py-2 rounded-lg hover:bg-slate-50">
-                სალონები
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            {['სალონები', 'სერვისები', 'აქციები'].map((item) => (
+              <Link 
+                key={item} 
+                href="/search" 
+                className={`text-sm font-medium transition-colors duration-300 hover:text-blue-500 ${
+                  isScrolled ? 'text-slate-600' : 'text-white/90 hover:text-white'
+                }`}
+              >
+                {item}
               </Link>
-              <Link href="/about" className="hover:text-blue-600 cursor-pointer transition-colors px-3 py-2 rounded-lg hover:bg-slate-50">
-                როგორ მუშაობს
-              </Link>
-              
-              <div className="h-6 w-px bg-slate-200 mx-2"></div>
-              
-              <Link href="/business" className="border border-slate-300 text-slate-600 px-5 py-2.5 rounded-full font-bold transition-all duration-300 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 flex items-center gap-2">
-                  ბიზნესისთვის
-              </Link>
-              
-              <button className="bg-slate-900 text-white px-6 py-2.5 rounded-full hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20 active:scale-95 font-bold flex items-center gap-2">
-                 <User size={18} />
-                  შესვლა
-              </button>
-          </div>
+            ))}
+            
+            <div className={`h-4 w-px transition-colors duration-300 ${isScrolled ? 'bg-slate-300' : 'bg-white/30'}`}></div>
 
-          {/* მობილური მენიუს ღილაკი */}
+            <Link 
+              href="/business" 
+              className={`text-sm font-medium transition-colors duration-300 ${
+                 isScrolled ? 'text-slate-600 hover:text-blue-600' : 'text-white/90 hover:text-white'
+              }`}
+            >
+              ბიზნესისთვის
+            </Link>
+
+            <button className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+              isScrolled 
+                ? 'bg-slate-900 text-white hover:bg-slate-800' 
+                : 'bg-white text-slate-900 hover:bg-slate-100'
+            }`}>
+              <User size={16} />
+              შესვლა
+            </button>
+          </nav>
+
+          {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-slate-700 p-3 hover:bg-slate-100 rounded-full transition-colors"
+            className={`md:hidden p-2 rounded-full transition-colors duration-300 z-50 ${
+              (isScrolled || mobileMenuOpen) ? 'text-slate-900 hover:bg-slate-100' : 'text-white hover:bg-white/10'
+            }`}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
-              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
-      </div>
+        </div>
+      </header>
 
-      {/* მობილური მენიუს ჩამოსაშლელი */}
+      {/* Mobile Navigation Overlay */}
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 w-full bg-white border-b border-slate-200 shadow-xl md:hidden p-6 flex flex-col space-y-4 animate-in slide-in-from-top-5">
-            <Link href="/search" className="flex items-center gap-3 text-slate-600 font-medium p-3 hover:bg-slate-50 rounded-xl">
-                <Search size={20} className="text-blue-500"/> სალონები
-            </Link>
-            <button className="bg-slate-900 text-white w-full py-3.5 rounded-xl font-bold">
-                შესვლა
-            </button>
+        <div className="fixed inset-0 bg-white z-40 flex flex-col pt-28 px-6 md:hidden animate-in slide-in-from-top-5 duration-300">
+           <nav className="flex flex-col gap-6 text-xl font-medium text-slate-800">
+              <Link href="/search" onClick={() => setMobileMenuOpen(false)} className="flex justify-between items-center border-b border-slate-100 pb-4">
+                სალონები <span className="text-slate-400">→</span>
+              </Link>
+              <Link href="/services" onClick={() => setMobileMenuOpen(false)} className="flex justify-between items-center border-b border-slate-100 pb-4">
+                სერვისები <span className="text-slate-400">→</span>
+              </Link>
+              <Link href="/business" onClick={() => setMobileMenuOpen(false)} className="flex justify-between items-center border-b border-slate-100 pb-4 text-blue-600">
+                ბიზნესისთვის <span className="text-blue-300">→</span>
+              </Link>
+              
+              <button className="bg-slate-900 text-white py-4 rounded-xl font-bold mt-8 flex items-center justify-center gap-2 shadow-xl active:scale-95 transition-transform">
+                <LogIn size={20} />
+                ავტორიზაცია
+              </button>
+           </nav>
         </div>
       )}
-    </nav>
+    </>
   );
 }

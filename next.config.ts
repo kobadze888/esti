@@ -9,7 +9,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "plus.unsplash.com", // ხშირად unsplash ამ დომენსაც იყენებს
+        hostname: "plus.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tbilisiweb.com", // დაემატა ახალი დომენი
       },
     ],
   },
