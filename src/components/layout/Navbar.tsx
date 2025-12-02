@@ -3,16 +3,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Menu, X, User, LogIn } from 'lucide-react';
+import { Logo } from '@/components/ui/Logo'; // [!code ++] იმპორტი
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  /**
-   * Scroll Handler
-   * Toggles the `isScrolled` state based on scroll position.
-   * Uses a small threshold (10px) to trigger the effect immediately but smoothly.
-   */
   const handleScroll = useCallback(() => {
     setIsScrolled(window.scrollY > 10);
   }, []);
@@ -22,7 +18,6 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  // Lock body scroll when mobile menu is active
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -44,11 +39,10 @@ export function Navbar() {
           
           {/* Brand Identity */}
           <Link href="/" className="relative z-50 group flex items-center gap-1">
-            <span className={`font-bold text-2xl tracking-tighter transition-colors duration-300 ${
-              isScrolled || mobileMenuOpen ? 'text-slate-900' : 'text-white'
-            }`}>
-              Esti<span className="text-blue-500">.</span>ge
-            </span>
+            {/* [!code ++] აქ ვიყენებთ ახალ Logo კომპონენტს */}
+            <Logo 
+              className={isScrolled || mobileMenuOpen ? 'text-slate-900' : 'text-white'} 
+            />
           </Link>
 
           {/* Desktop Navigation */}
