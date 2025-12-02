@@ -3,7 +3,7 @@ import React from 'react';
 
 interface LogoProps {
   className?: string;
-  dotColor?: string; 
+  dotColor?: string; // წერტილის ფერის შესაცვლელად (სურვილისამებრ)
 }
 
 export function Logo({ className = "", dotColor = "text-blue-500" }: LogoProps) {
