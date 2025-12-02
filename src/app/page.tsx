@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, MapPin, Calendar, ArrowRight, Star, Heart, Phone, Zap, Info } from 'lucide-react';
@@ -5,6 +8,48 @@ import { Navbar } from '@/components/layout/Navbar';
 import { db, CATEGORIES } from '@/lib/mockDb';
 
 export default function Home() {
+  // --- TYPEWRITER EFFECT LOGIC ---
+  const [placeholderText, setPlaceholderText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  // განახლებული სია - სულ 6 ელემენტი
+  const words = [
+    "სალონი...", 
+    "ბარბერშოპი...", 
+    "თმის შეჭრა...", 
+    "წვერის კორექცია...", 
+    "შილაკი...", 
+    "სპა ცენტრი..."
+  ];
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const i = loopNum % words.length;
+      const fullText = words[i];
+
+      setPlaceholderText(
+        isDeleting 
+          ? fullText.substring(0, placeholderText.length - 1) 
+          : fullText.substring(0, placeholderText.length + 1)
+      );
+
+      setTypingSpeed(isDeleting ? 50 : 150);
+
+      if (!isDeleting && placeholderText === fullText) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && placeholderText === '') {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [placeholderText, isDeleting, loopNum, typingSpeed, words]);
+  // -------------------------------
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
       <Navbar />
@@ -12,108 +57,107 @@ export default function Home() {
       <main className="flex-grow">
         
        {/* --- HERO SECTION --- */}
-<section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-    
-    {/* Background Image */}
-    <div className="absolute inset-0 z-0">
-        <Image 
-          src="https://tbilisiweb.com/wp-content/uploads/2025/12/bg_hero_small.jpeg" 
-          alt="Esti.ge Salon Interior" 
-          fill 
-          className="object-cover"
-          priority 
-          quality={100}
-          unoptimized 
-          sizes="100vw"
-        />
-        {/* Updated Overlay: 
-            - ამოღებულია indigo (ლურჯი), რომ არ იყოს "მყვირალა".
-            - Opacity გაზრდილია 90-95%-მდე მაქსიმალური კონტრასისთვის.
-            - გამოყენებულია bg-gradient-to-b (ზემოდან ქვემოთ), რომ ძირში შავში გადავიდეს.
-        */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/90 to-slate-950/95"></div>
-    </div>
-
-    {/* Hero Content */}
-    <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center mt-10">
-        
-        {/* Badge - ოდნავ გავამუქე ფონიც */}
-        <div className="inline-flex items-center justify-center px-5 py-1.5 rounded-full bg-black/20 backdrop-blur-md border border-white/10 mb-8 cursor-default">
-            <span className="text-white text-xs md:text-sm tracking-wide">
-                <span className="font-bold">Esti.ge</span>
-                <span className="mx-2 opacity-50">|</span>
-                <span className="font-medium opacity-80">სილამაზის სერვისების ერთიანი სივრცე</span>
-            </span>
-        </div>
-
-        {/* H1 Heading */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-2xl animate-fade-in-up">
-            ჩაეწერე მარტივად
-        </h1>
-        
-        {/* Subtitle - ტექსტის ფერი slate-300-დან slate-200-ზე ავწიე რომ უკეთ გამოჩნდეს მუქ ფონზე */}
-        <p className="text-base md:text-xl text-slate-200 mb-12 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            იპოვე საუკეთესო სალონები, ბარბერშოპები და ესთეტიკური ცენტრები შენს უბანში.
-        </p>
-
-        {/* Search Bar */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-2 rounded-2xl md:rounded-full max-w-4xl mx-auto shadow-2xl flex flex-col md:flex-row gap-2 animate-fade-in-up transform transition-all hover:scale-[1.005] hover:border-white/20 hover:bg-white/10" style={{ animationDelay: '0.2s' }}>
+       <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
             
-            {/* Query Input */}
-            <div className="flex-1 bg-white rounded-xl md:rounded-l-full md:rounded-r-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
-                <Search className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
-                <div className="flex flex-col items-start w-full">
-                    <label htmlFor="search-query" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">რას ეძებ?</label>
-                    <input 
-                      id="search-query"
-                      type="text" 
-                      placeholder="მაგ: სალონი, ბარბერშოპი" 
-                      className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-400 text-sm md:text-base h-5"
-                    />
-                </div>
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <Image 
+                  src="https://tbilisiweb.com/wp-content/uploads/2025/12/bg_hero_small.jpeg" 
+                  alt="Esti.ge Salon Interior" 
+                  fill 
+                  className="object-cover"
+                  priority 
+                  quality={100}
+                  unoptimized 
+                  sizes="100vw"
+                />
+                {/* Overlay with 70% opacity */}
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-900/70 to-slate-950/70"></div>
             </div>
 
-            <div className="hidden md:block w-px bg-white/10 my-2"></div>
+            {/* Hero Content */}
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-4 text-center mt-10">
+                
+                {/* Badge */}
+                <div className="inline-flex items-center justify-center px-5 py-1.5 rounded-full bg-black/20 backdrop-blur-md border border-white/10 mb-8 cursor-default">
+                    <span className="text-white text-xs md:text-sm tracking-wide">
+                        <span className="font-bold">Esti.ge</span>
+                        <span className="mx-2 opacity-50">|</span>
+                        <span className="font-medium opacity-80">სილამაზის სერვისების ერთიანი სივრცე</span>
+                    </span>
+                </div>
 
-            {/* Location Input */}
-            <div className="flex-1 bg-white rounded-xl md:rounded-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
-                <MapPin className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
-                <div className="flex flex-col items-start w-full">
-                    <label htmlFor="search-location" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">ლოკაცია</label>
-                    <input 
-                      id="search-location"
-                      type="text" 
-                      placeholder="თბილისი, ვაკე..." 
-                      className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-400 text-sm md:text-base h-5"
-                    />
+                {/* H1 Heading */}
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-2xl animate-fade-in-up">
+                    ჩაეწერე მარტივად
+                </h1>
+                
+                {/* Subtitle */}
+                <p className="text-base md:text-xl text-slate-200 mb-12 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                    იპოვე საუკეთესო სალონები, ბარბერშოპები და ესთეტიკური ცენტრები შენს უბანში.
+                </p>
+
+                {/* Search Bar Container */}
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-2 rounded-2xl md:rounded-full max-w-5xl mx-auto shadow-2xl flex flex-col md:flex-row gap-2 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    
+                    {/* Query Input (ANIMATED) */}
+                    <div className="flex-1 bg-white rounded-xl md:rounded-l-full md:rounded-r-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
+                        <Search className="text-slate-400 group-hover:text-blue-600 transition-colors w-5 h-5 mr-3" />
+                        <div className="flex flex-col items-start w-full">
+                            <label htmlFor="search-query" className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">რას ეძებ?</label>
+                            <input 
+                              id="search-query"
+                              type="text" 
+                              placeholder={placeholderText} 
+                              className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-600 text-sm md:text-base h-5 placeholder:transition-all"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="hidden md:block w-px bg-white/10 my-2"></div>
+
+                    {/* Location Input */}
+                    <div className="flex-1 bg-white rounded-xl md:rounded-none h-14 md:h-16 px-6 flex items-center group cursor-text transition-colors hover:bg-slate-50 relative z-20">
+                        <MapPin className="text-slate-400 group-hover:text-blue-600 transition-colors w-5 h-5 mr-3" />
+                        <div className="flex flex-col items-start w-full">
+                            <label htmlFor="search-location" className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">ლოკაცია</label>
+                            <input 
+                              id="search-location"
+                              type="text" 
+                              placeholder="თბილისი, ვაკე..." 
+                              className="w-full bg-transparent outline-none text-slate-900 font-bold placeholder:text-slate-600 text-sm md:text-base h-5"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Date Input */}
+                    <div className="hidden md:flex flex-1 bg-white rounded-none h-16 px-6 items-center group cursor-pointer hover:bg-slate-50 transition-colors border-l border-slate-100 relative z-20">
+                        <Calendar className="text-slate-400 group-hover:text-blue-600 transition-colors w-5 h-5 mr-3" />
+                        <div className="flex flex-col items-start w-full">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">თარიღი</label>
+                            <span className="text-slate-800 text-sm font-bold">ნებისმიერი</span>
+                        </div>
+                    </div>
+
+                    {/* Search Button */}
+                    <Link href="/search" className="bg-blue-600 hover:bg-blue-700 text-white h-14 md:h-16 px-10 rounded-xl md:rounded-full font-bold text-lg transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 md:w-auto w-full relative z-20">
+                        <Search className="w-5 h-5" />
+                        <span>ძებნა</span>
+                    </Link>
+                </div>
+
+                {/* Quick Categories - Total 6 Items */}
+                <div className="mt-10 flex flex-wrap justify-center gap-3 text-sm font-medium text-white/70 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                    <Link href="/search?q=hair" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">✂️</span> თმის შეჭრა</Link>
+                    <Link href="/search?q=barber" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💈</span> ბარბერშოპი</Link>
+                    <Link href="/search?q=beard" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">🧔</span> წვერის კორექცია</Link>
+                    <Link href="/search?q=nails" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💅</span> მანიკური</Link>
+                    <Link href="/search?q=shellac" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">🎨</span> შილაკი</Link>
+                    <Link href="/search?q=spa" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💆‍♀️</span> სპა</Link>
                 </div>
             </div>
-
-            {/* Date Input */}
-            <div className="hidden md:flex flex-1 bg-white rounded-none h-16 px-6 items-center group cursor-pointer hover:bg-slate-50 transition-colors border-l border-slate-100 relative z-20">
-                <Calendar className="text-slate-400 group-hover:text-indigo-600 transition-colors w-5 h-5 mr-3" />
-                <div className="flex flex-col items-start w-full">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5 cursor-pointer">თარიღი</label>
-                    <span className="text-slate-800 text-sm font-bold">ნებისმიერი</span>
-                </div>
-            </div>
-
-            {/* Search Button */}
-            <Link href="/search" className="bg-indigo-600 hover:bg-indigo-700 text-white h-14 md:h-16 px-10 rounded-xl md:rounded-full font-bold text-lg transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 md:w-auto w-full relative z-20">
-                <span>ძებნა</span>
-            </Link>
-        </div>
-
-        {/* Quick Categories */}
-        <div className="mt-10 flex flex-wrap justify-center gap-3 text-sm font-medium text-white/70 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            <Link href="/search?q=hair" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">✂️</span> თმის შეჭრა</Link>
-            <Link href="/search?q=nails" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💅</span> მანიკური</Link>
-            <Link href="/search?q=barber" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💈</span> ბარბერშოპი</Link>
-            <Link href="/search?q=spa" className="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all flex items-center gap-2 backdrop-blur-sm border border-white/5 hover:border-white/20"><span className="opacity-80">💆‍♀️</span> სპა</Link>
-        </div>
-    </div>
-    
-</section>
+            
+       </section>
 
         {/* --- CATEGORIES SECTION --- */}
         <section className="py-20 max-w-7xl mx-auto px-4 relative z-10 -mt-24">
@@ -140,7 +184,6 @@ export default function Home() {
                 </div>
                 
                 <div className="grid md:grid-cols-3 gap-12 relative">
-                    {/* Connecting Line (Desktop) */}
                     <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-slate-100 via-blue-100 to-slate-100 -z-0"></div>
                     
                     {/* Step 1 */}
@@ -158,7 +201,7 @@ export default function Home() {
                     {/* Step 2 */}
                     <div className="text-center group relative">
                         <div className="w-24 h-24 bg-white border border-slate-100 rounded-2xl -rotate-2 flex items-center justify-center mx-auto mb-8 shadow-lg shadow-slate-200/50 group-hover:-rotate-6 transition-all duration-300 z-10 relative">
-                            <div className="bg-purple-50 text-purple-600 w-16 h-16 rounded-xl flex items-center justify-center rotate-2 group-hover:rotate-6 transition-all">
+                            <div className="bg-rose-50 text-rose-600 w-16 h-16 rounded-xl flex items-center justify-center rotate-2 group-hover:rotate-6 transition-all">
                                 <Info size={32} strokeWidth={1.5} />
                             </div>
                             <div className="absolute -top-3 -right-3 w-8 h-8 bg-slate-900 text-white rounded-lg flex items-center justify-center font-bold border-4 border-white shadow-sm">2</div>
@@ -220,7 +263,7 @@ export default function Home() {
                                         Info Only
                                     </span>
                                 )}
-                                <button className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-red-500 transition-colors">
+                                <button className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-rose-500 transition-colors">
                                     <Heart size={18} />
                                 </button>
                             </div>
@@ -242,9 +285,9 @@ export default function Home() {
                         {/* Card Body */}
                         <div className="p-6 flex flex-col flex-grow">
                             <div className="flex justify-between items-center mb-4 pb-4 border-b border-slate-50">
-                                <div className="flex items-center gap-1.5 text-amber-500 font-bold">
-                                    <Star size={16} fill="currentColor" />
-                                    <span>4.8</span>
+                                <div className="flex items-center gap-1.5 font-bold">
+                                    <Star size={16} className="text-amber-500" fill="currentColor" />
+                                    <span className="text-amber-500">4.8</span>
                                     <span className="text-slate-400 font-medium text-xs">(120 შეფასება)</span>
                                 </div>
                                 <div className="text-xs font-bold px-2 py-1 bg-green-50 text-green-700 rounded-md">
@@ -275,9 +318,8 @@ export default function Home() {
         {/* --- BUSINESS CTA SECTION --- */}
         <section className="py-20 px-4">
             <div className="max-w-7xl mx-auto bg-slate-900 rounded-[2.5rem] overflow-hidden relative shadow-2xl shadow-slate-900/20">
-                {/* Background Effects */}
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-rose-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2"></div>
                 
                 <div className="grid md:grid-cols-2 gap-12 items-center p-12 md:p-24 relative z-10">
                     <div className="space-y-8">
@@ -286,7 +328,7 @@ export default function Home() {
                         </div>
                         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
                             დაარეგისტრირე სალონი <br/>
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">სრულიად უფასოდ</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-rose-400">სრულიად უფასოდ</span>
                         </h2>
                         <div className="space-y-4 text-slate-300 text-lg max-w-lg leading-relaxed">
                             <p>
@@ -306,12 +348,11 @@ export default function Home() {
                         </div>
                     </div>
                     
-                    {/* Abstract UI Representation */}
                     <div className="hidden md:block relative h-80 w-full perspective-1000">
                         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-2xl rotate-y-12 transform transition-transform hover:rotate-y-0 duration-700">
                             <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
                                 <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                                    <div className="w-3 h-3 rounded-full bg-rose-400"></div>
                                     <div className="w-3 h-3 rounded-full bg-amber-400"></div>
                                     <div className="w-3 h-3 rounded-full bg-green-400"></div>
                                 </div>
@@ -356,7 +397,7 @@ export default function Home() {
                         <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-blue-600 hover:text-white transition-colors cursor-pointer">
                             <span className="font-bold text-xs">FB</span>
                         </div>
-                        <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-pink-600 hover:text-white transition-colors cursor-pointer">
+                        <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-rose-600 hover:text-white transition-colors cursor-pointer">
                             <span className="font-bold text-xs">IG</span>
                         </div>
                     </div>
